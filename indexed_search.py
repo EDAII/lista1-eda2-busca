@@ -1,47 +1,47 @@
-def indexed_search(list_elements, element):
+import time
 
-    list_sequences = [100, 1000, 10000, 100000]
+def indexed_search(list_elements, element, list_size):
+
+    start = time.time()
+
     result_indexed = []
 
-    for l in list_sequences:
-        lista_indexada = criar_lista_indexada(list_elements, l)
-        realiza_busca(lista_indexada, list_elements)
-        # Lembra de dar o append no tempo na lista result_indexed
+    lista_indexada = criar_lista_indexada(list_elements, list_size)
+    realiza_busca(lista_indexada, list_elements, element)
 
-"""
-Tabela com 5 elementos
+    stop = time.time()
 
-[3, 10, 27, 38, 40]
+    elapsed = stop - start
+    elapsed = elapsed*1000
 
-alvo = 18
+    result_indexed.append(elapsed)
 
-inicio =
-fim =
-
-"""
+    imprime_lista(result_indexed)
 
 def criar_lista_indexada(list_elements, quantidade):
 
     lista_indexada = []
     index_counter = 0
-    valor = quantidade/10
+    valor = int(quantidade/10)
 
     lista_indexada.append(index_counter)
 
-    while index_counter != quantidade:
+    while index_counter <= quantidade:
         index_counter += valor
-        lista_indexada.append(index_counter)
+
+        if index_counter <= quantidade:
+            lista_indexada.append(index_counter-1)
 
     return lista_indexada
 
 #    100 1000 10000 100000
 
-def realiza_busca(lista_indexada, list_elements):
+def realiza_busca(lista_indexada, list_elements, element):
     inicio = 0
-    fim = len(list_elements)
+    fim = len(list_elements)-1
 
     for i in lista_indexada:
-        if element > list_elements[i]:
+        if element  > list_elements[i]:
             inicio = i
         elif element < list_elements[i]:
             fim = i
@@ -58,3 +58,7 @@ def realiza_busca(lista_indexada, list_elements):
             was_found = True
             break
         inicio += 1
+
+def imprime_lista(result_indexed):
+    for value in result_indexed:
+        print(value)
