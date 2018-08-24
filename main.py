@@ -1,20 +1,37 @@
-# from binary_search import binary_search
+from binary_search import binary_search
 from quick_sort import quick_sort
-# from transposition_sequencial import transposition_sequential
-# from sentinel_sequential import sentinel_sequential
+from transposition_sequencial import transposition_sequential
+from sentinel_sequential import sentinel_sequential
 from indexed_search import indexed_search
+from sequential_search import sequential_search
+from plot_graphics import plota_grafico
 import random
+import time
 
-list = [1, 2, 3, 5, 4, 6, 13, 7]
+def main():
+    opcao = 'x'
 
-element = 10
+    menu_inicial = {
+        '1': analisa_tempo,
+        '2': transposition_sequential
+    }
 
-# quick_sort(list, 0, len(list))
+    print("Escolha uma das opções abaixo para escolher um contexto:")
+    print("(1) - Análise de duração de algoritmos")
+    print("(2) - Acompanhamento de números mais pesquisados")
+    print("(0) - Sair")
 
-# if binary_search(list, element):
-#     print ("O elemento foi encontrado.")
-# else:
-#     print ("O elemento {} não está contido no vetor.".format(element))
+    print("Escolha um valor válido:")
+    opcao = input()
+
+    if opcao == '1':
+        menu_inicial[opcao]()
+    elif opcao == '2':
+        lista = []
+        size_list = 15
+        insere_elementos_desordenados(size_list, lista, size_list**3)
+
+        menu_inicial[opcao](lista)
 
 def insere_elementos_desordenados(number_of_elements, list_elements, limit):
     for x in range(number_of_elements):
@@ -26,10 +43,69 @@ def insere_elementos_desordenados(number_of_elements, list_elements, limit):
         list_elements.append(value)
 
 
-list_sequences = [100, 1000, 10000, 100000]
+def analisa_tempo():
 
-for e in list_sequences:
-    lista = []
-    insere_elementos_desordenados(e, lista, e**3)
-    quick_sort(lista, 0, len(lista))
-    indexed_search(lista, element, e)
+    size_list = 10000
+
+    result_binary = []
+    result_indexed = []
+    result_sentinel = []
+    result_simple = []
+
+    i = 0
+
+    while i <= 50:
+
+        lista = []
+        insere_elementos_desordenados(size_list, lista, size_list**2)
+        quick_sort(lista, 0, len(lista))
+
+        # element = random.randint(0, size_list**2)
+        element = lista[-1]
+
+        # ord_start = time.time()
+        # ord_stop = time.time()
+        #
+        # ord_res = ord_stop - ord_start
+
+        start = time.time()
+        binary_search(lista, element)
+        stop = time.time()
+
+        elapsed = stop - start # + ord_res
+
+        result_binary.append(elapsed)
+
+        start = time.time()
+        indexed_search(lista, element, size_list)
+        stop = time.time()
+
+        elapsed = stop - start# + ord_res
+
+        result_indexed.append(elapsed)
+
+        list = lista
+        list.append(element)
+
+        start = time.time()
+        sentinel_sequential(list, element)
+        stop = time.time()
+
+        elapsed = stop - start
+
+        result_sentinel.append(elapsed)
+
+        start = time.time()
+        sequential_search(lista, element)
+        stop = time.time()
+
+        elapsed = stop - start
+
+        result_simple.append(elapsed)
+
+        i += 1
+
+    plota_grafico(result_binary, result_indexed, result_sentinel, result_simple)
+
+    return
+main()
